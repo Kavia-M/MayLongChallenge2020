@@ -1,0 +1,105 @@
+#include <bits/stdc++.h>
+using namespace std;
+//#define pop_back() erase(0)
+int main() {
+  int T;
+  cin>>T;
+  while(T--){
+      int N,k;
+      cin>>N>>k;
+      int a[N+1];
+      
+      vector<pair<int,int>> swaps;
+      vector<tuple<int,int,int>> shifts;
+      a[0]=0;
+      int vis[N+1]={0};
+      vis[0]=1;
+      for(int i=1;i<(N+1);i++){
+          cin>>a[i];
+      }
+      for(int i=1;i<(N+1);i++){
+          if(vis[i]==1) continue;
+          if(a[i]==i){
+              vis[i]=1;
+              continue;
+          }
+          if(a[i]!=i){
+             
+              vector<int> cycle;
+              
+              int j=i;
+              while(vis[j]!=1){
+                  vis[j]=1;
+                cycle.push_back(j);
+                j=a[j];
+              }
+            
+              //  for(auto it : cycle) cout<<it;
+                int x=cycle.front();
+               // cout<<"\n x--"<<x<<'\n';
+                auto o = cycle.begin();
+                cycle.erase(o);
+                while(cycle.size()>1){
+                int y=cycle.front();
+            //    cout<<"\n y--"<<y<<'\n';
+               // cycle.pop_back();
+               o = cycle.begin();
+               cycle.erase(o);
+                int z=cycle.front();
+               o = cycle.begin();
+               cycle.erase(o);
+                shifts.push_back(make_tuple(x,y,z));
+                k=k-1;
+                }
+                if(cycle.size()==1){
+                    int w=cycle.front();
+                    o = cycle.begin();
+                    cycle.erase(o);
+                    swaps.push_back(make_pair(x,w));
+                }
+                if(swaps.size()>=2){
+                    pair<int,int> p1,p2;
+                    p1=swaps.front();
+                    auto so = swaps.begin();
+                    swaps.erase(so);
+                    p2=swaps.front();
+                   so = swaps.begin();
+                   swaps.erase(so);
+                    shifts.push_back(make_tuple(p1.first,p1.second,p2.second));
+                    k=k-1;
+                    shifts.push_back(make_tuple(p2.first,p2.second,p1.first));
+                    k=k-1;
+                }
+    
+            
+          }
+          
+      }
+      while(swaps.size()>=2){
+                    pair<int,int> p1,p2;
+                    p1=swaps.front();
+                   
+                   auto so = swaps.begin();
+                   swaps.erase(so);
+                    p2=swaps.front();
+                    so = swaps.begin();
+                    swaps.erase(so);
+                    shifts.push_back(make_tuple(p1.first,p1.second,p2.second));
+                    k=k-1;
+                    shifts.push_back(make_tuple(p2.first,p2.second,p1.first));
+                    k=k-1;
+                }
+     if((swaps.size()==1) || k<0 ) {
+         cout<<(-1)<<endl;
+         continue;
+     }
+      cout<<shifts.size()<<endl;
+      for(auto it : shifts){
+          cout<< get<0>(it) <<' '<< get<1>(it) <<' '<< get<2>(it)<<endl;
+          
+      }
+    //  cout<<endl;
+  }
+  
+  	return 0;
+}
